@@ -1,0 +1,96 @@
+#PRECISION DE LA VERSION DE COMPOSE A UTILISE
+version: "3"
+
+#DEFINITION DES SERVICES
+services:
+  # DEFINITION DU SERVICE MYSQL 8.0
+  mysql8.0:
+    image: mysql:8.0
+    container_name: sql8.0
+    ports:
+      - "3306:3306"
+    environment: 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db-data8.0:/var/lib/mysql
+    networks:
+      black-beard:
+        ipv4_address: 172.16.0.10
+     
+  # DEFINITION DU SERVICE MYSQL 5.7    
+  mysql5.7:
+    image: mysql:5.7
+    container_name: sql5.7    
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD} 
+    volumes:
+      - db-data5.7:/var/lib/mysql
+    networks:
+      black-beard:
+        ipv4_address: 172.16.0.20
+
+  # DEFINITION DU SERVICE MYSQL 5.6
+  mysql5.6:
+    image: mysql:5.6
+    container_name: sql5.6
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db-data5.6:/var/lib/mysql
+    networks:
+      black-beard:
+        ipv4_address: 172.16.0.30
+
+  # DEFINITION DU SERVICE MYSQL 5.5
+  mysql5.5:
+    image: mysql:5.5
+    container_name: sql5.5
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - db-data5.5:/var/lib/mysql
+    networks:
+      black-beard:
+        ipv4_address: 172.16.0.40
+
+  # DEFINITION DU SERVICE PHP 
+  php:  
+    container_name: php
+    build:
+      context: .
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+        MYSQL_VERSION: ${MYSQL_VERSION}
+
+# CREATION DES VOLUMES 
+volumes :
+  db-data8.0: {}
+  db-data5.7: {}
+  db-data5.6: {}
+  db-data5.5: {}
+
+# CREATION DU RESEAU BLACK-BEARD
+networks:
+  black-beard:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.16.0.0/24
